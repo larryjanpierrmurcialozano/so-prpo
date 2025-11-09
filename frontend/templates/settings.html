@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configuración de Página</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .color-picker-wrapper {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    .color-option:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .color-option.active {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 3px rgba(13,110,253,0.25);
+    }
+    .preview-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .logo-preview {
+      max-width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+    }
+    .color-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    /* Adaptaciones móviles */
+    @media (max-width: 768px) {
+      .container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .navbar-brand {
+        font-size: 1.1rem;
+      }
+
+      .navbar-nav .nav-link {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .card {
+        margin-top: 15px;
+      }
+
+      .card-header h4 {
+        font-size: 1.2rem;
+      }
+
+      .form-label {
+        font-size: 14px;
+        margin-bottom: 6px;
+      }
+
+      .form-control,
+      .form-select {
+        padding: 12px 15px;
+        font-size: 16px; /* Evita zoom en iOS */
+        border-radius: 8px;
+      }
+
+      .form-control-lg {
+        padding: 15px 20px;
+        font-size: 16px;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        min-height: 44px;
+      }
+
+      .btn-lg {
+        padding: 15px 25px;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      /* Logo preview responsive */
+      .logo-preview {
+        max-width: 150px;
+        max-height: 150px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      /* Color picker responsive */
+      .color-picker-wrapper {
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .color-option {
+        width: 40px;
+        height: 40px;
+        min-width: 44px; /* Área táctil mínima */
+        min-height: 44px;
+      }
+
+      .color-section {
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+
+      .preview-section {
+        padding: 15px;
+        margin-top: 15px;
+      }
+
+      /* Navegación responsive */
+      .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .nav-link {
+        margin: 2px 0;
+        border-radius: 6px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Grid responsive */
+      .col-md-8 {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .card-header {
+        padding: 12px 15px;
+      }
+
+      .card-header h4 {
+        font-size: 1.1rem;
+      }
+
+      .card-body {
+        padding: 15px;
+      }
+
+      .form-control {
+        padding: 10px 12px;
+      }
+
+      .btn-lg {
+        padding: 12px 20px;
+        font-size: 15px;
+      }
+
+      .color-option {
+        width: 35px;
+        height: 35px;
+        min-width: 44px;
+        min-height: 44px;
+      }
+
+      .logo-preview {
+        max-width: 120px;
+        max-height: 120px;
+      }
+
+      .color-section {
+        padding: 10px;
+      }
+
+      .preview-section {
+        padding: 10px;
+      }
+    }
+
+    /* Mejoras para pantallas táctiles */
+    @media (hover: none) and (pointer: coarse) {
+      .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+      }
+
+      .btn:hover {
+        transform: none;
+      }
+
+      .color-option:hover {
+        transform: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      }
+
+      /* Asegurar áreas táctiles mínimas */
+      .color-option {
+        min-width: 44px;
+        min-height: 44px;
+      }
+    }
+
+    /* Mejoras adicionales para accesibilidad móvil */
+    @media (max-width: 768px) {
+      .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      }
+
+      .alert {
+        padding: 10px 15px;
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .text-muted {
+        font-size: 12px;
+      }
+
+      small {
+        font-size: 11px;
+      }
+
+      /* Espaciado mejorado */
+      .mb-4 {
+        margin-bottom: 20px !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="/"><i class="bi bi-shop"></i> Da Vincin</a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/products/dashboard"><i class="bi bi-box-seam"></i> Productos</a>
+        <a class="nav-link active" href="/settings"><i class="bi bi-gear"></i> Configuración</a>
+        <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-palette"></i> Configuración de Página</h4>
+          </div>
+          <div class="card-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form method="post" action="/settings/update" enctype="multipart/form-data">
+              <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-card-heading"></i> Título de la Tienda</label>
+                <input type="text" class="form-control form-control-lg" name="title" value="{{ page.title }}" required maxlength="150">
+                <small class="text-muted">Este nombre aparecerá en tu página pública</small>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-image"></i> Logo de la Tienda</label>
+                {% if page.logo_url %}
+                  <div class="mb-3">
+                    <img src="{{ page.logo_url }}" class="logo-preview border rounded p-2" alt="Logo actual" style="height: {{ page.logo_size }}px;">
+                    <p class="text-muted mt-2">Logo actual</p>
+                  </div>
+                {% endif %}
+                <input type="file" class="form-control" name="logo" accept="image/*">
+                <small class="text-muted">Formatos: JPG, PNG, GIF (max 8MB)</small>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-arrows-angle-expand"></i> Tamaño del Logo (px)</label>
+                <input type="range" class="form-range" name="logo_size" id="logoSize" min="30" max="200" value="{{ page.logo_size }}" oninput="document.getElementById('sizeValue').textContent = this.value">
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">30px</span>
+                  <span class="badge bg-primary" id="sizeValue">{{ page.logo_size }}</span>
+                  <span class="text-muted">200px</span>
+                </div>
+              </div>
+
+              <!-- Sección de Información de Contacto -->
+              <h5 class="mb-3"><i class="bi bi-telephone-fill"></i> Información de Contacto</h5>
+
+              <div class="color-section">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold"><i class="bi bi-phone"></i> Número de Teléfono</label>
+                    <input type="text" class="form-control" name="phone_number" value="{{ page.phone_number or '' }}"
+                           placeholder="+1234567890" maxlength="20">
+                    <small class="text-muted">Los clientes podrán contactarte por teléfono</small>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold"><i class="bi bi-facebook"></i> URL de Facebook</label>
+                    <input type="url" class="form-control" name="facebook_url" value="{{ page.facebook_url or '' }}"
+                           placeholder="https://facebook.com/tu-perfil">
+                    <small class="text-muted">Link a tu página o perfil de Facebook</small>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Información:</strong> Esta información aparecerá en tu página pública para que los clientes puedan contactarte fácilmente.
+                  </div>
+                </div>
+              </div>
+
+              <h5 class="mb-3"><i class="bi bi-palette-fill"></i> Personalización de Colores</h5>
+
+              <div class="color-section">
+                <label class="form-label fw-bold"><i class="bi bi-window-desktop"></i> Color del Header</label>
+                <p class="text-muted small">Parte superior de la página donde aparece el logo</p>
+                <div class="color-picker-wrapper mb-3">
+                  <div class="color-option" style="background:#667eea" onclick="selectColor('color_header', '#667eea', this)"></div>
+                  <div class="color-option" style="background:#0d6efd" onclick="selectColor('color_header', '#0d6efd', this)"></div>
+                  <div class="color-option" style="background:#6610f2" onclick="selectColor('color_header', '#6610f2', this)"></div>
+                  <div class="color-option" style="background:#6f42c1" onclick="selectColor('color_header', '#6f42c1', this)"></div>
+                  <div class="color-option" style="background:#d63384" onclick="selectColor('color_header', '#d63384', this)"></div>
+                  <div class="color-option" style="background:#dc3545" onclick="selectColor('color_header', '#dc3545', this)"></div>
+                  <div class="color-option" style="background:#fd7e14" onclick="selectColor('color_header', '#fd7e14', this)"></div>
+                  <div class="color-option" style="background:#198754" onclick="selectColor('color_header', '#198754', this)"></div>
+                </div>
+                <input type="color" class="form-control form-control-color" name="color_header" id="color_header" value="{{ page.color_header }}">
+              </div>
+
+              <div class="color-section">
+                <label class="form-label fw-bold"><i class="bi bi-file-earmark"></i> Color de Fondo (Body)</label>
+                <p class="text-muted small">Fondo principal de la página</p>
+                <div class="color-picker-wrapper mb-3">
+                  <div class="color-option" style="background:#ffffff;border:1px solid #ddd" onclick="selectColor('color_bg', '#ffffff', this)"></div>
+                  <div class="color-option" style="background:#f8f9fa;border:1px solid #ddd" onclick="selectColor('color_bg', '#f8f9fa', this)"></div>
+                  <div class="color-option" style="background:#e9ecef" onclick="selectColor('color_bg', '#e9ecef', this)"></div>
+                  <div class="color-option" style="background:#fef7e5" onclick="selectColor('color_bg', '#fef7e5', this)"></div>
+                  <div class="color-option" style="background:#e8f5e9" onclick="selectColor('color_bg', '#e8f5e9', this)"></div>
+                  <div class="color-option" style="background:#e3f2fd" onclick="selectColor('color_bg', '#e3f2fd', this)"></div>
+                  <div class="color-option" style="background:#f3e5f5" onclick="selectColor('color_bg', '#f3e5f5', this)"></div>
+                  <div class="color-option" style="background:#ffebee" onclick="selectColor('color_bg', '#ffebee', this)"></div>
+                </div>
+                <input type="color" class="form-control form-control-color" name="color_bg" id="color_bg" value="{{ page.color_bg }}">
+              </div>
+
+              <div class="color-section">
+                <label class="form-label fw-bold"><i class="bi bi-arrow-down-square"></i> Color del Footer</label>
+                <p class="text-muted small">Parte inferior de la página</p>
+                <div class="color-picker-wrapper mb-3">
+                  <div class="color-option" style="background:#343a40" onclick="selectColor('color_footer', '#343a40', this)"></div>
+                  <div class="color-option" style="background:#212529" onclick="selectColor('color_footer', '#212529', this)"></div>
+                  <div class="color-option" style="background:#495057" onclick="selectColor('color_footer', '#495057', this)"></div>
+                  <div class="color-option" style="background:#6c757d" onclick="selectColor('color_footer', '#6c757d', this)"></div>
+                  <div class="color-option" style="background:#0d6efd" onclick="selectColor('color_footer', '#0d6efd', this)"></div>
+                  <div class="color-option" style="background:#198754" onclick="selectColor('color_footer', '#198754', this)"></div>
+                  <div class="color-option" style="background:#dc3545" onclick="selectColor('color_footer', '#dc3545', this)"></div>
+                  <div class="color-option" style="background:#ffc107" onclick="selectColor('color_footer', '#ffc107', this)"></div>
+                </div>
+                <input type="color" class="form-control form-control-color" name="color_footer" id="color_footer" value="{{ page.color_footer }}">
+              </div>
+
+              <div class="color-section">
+                <label class="form-label fw-bold"><i class="bi bi-fonts"></i> Color del Texto Principal</label>
+                <p class="text-muted small">Color de los textos y títulos</p>
+                <div class="color-picker-wrapper mb-3">
+                  <div class="color-option" style="background:#212529" onclick="selectColor('color_text', '#212529', this)"></div>
+                  <div class="color-option" style="background:#495057" onclick="selectColor('color_text', '#495057', this)"></div>
+                  <div class="color-option" style="background:#6c757d" onclick="selectColor('color_text', '#6c757d', this)"></div>
+                  <div class="color-option" style="background:#ffffff;border:1px solid #ddd" onclick="selectColor('color_text', '#ffffff', this)"></div>
+                  <div class="color-option" style="background:#0d6efd" onclick="selectColor('color_text', '#0d6efd', this)"></div>
+                  <div class="color-option" style="background:#198754" onclick="selectColor('color_text', '#198754', this)"></div>
+                  <div class="color-option" style="background:#dc3545" onclick="selectColor('color_text', '#dc3545', this)"></div>
+                  <div class="color-option" style="background:#ffc107" onclick="selectColor('color_text', '#ffc107', this)"></div>
+                </div>
+                <input type="color" class="form-control form-control-color" name="color_text" id="color_text" value="{{ page.color_text }}">
+              </div>
+
+              <h5 class="mb-3 mt-4"><i class="bi bi-text-paragraph"></i> Tamaño del Texto</h5>
+
+              <div class="color-section">
+                <label class="form-label fw-bold"><i class="bi bi-type"></i> Tamaño del Texto (px)</label>
+                <p class="text-muted small">Tamaño base del texto en tu página</p>
+                <input type="range" class="form-range" name="font_size" id="fontSize" min="12" max="24" value="{{ page.font_size or 16 }}" oninput="updateFontPreview(this.value)">
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">12px (Pequeño)</span>
+                  <span class="badge bg-primary" id="fontSizeValue">{{ page.font_size or 16 }}px</span>
+                  <span class="text-muted">24px (Grande)</span>
+                </div>
+                <div class="mt-3 p-3 border rounded" style="background: #f8f9fa;">
+                  <p class="mb-0" id="fontPreview" style="font-size: {{ page.font_size or 16 }}px;">
+                    <i class="bi bi-eye"></i> Vista previa del tamaño del texto en tu tienda
+                  </p>
+                </div>
+              </div>
+
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-check-circle"></i> Guardar Cambios</button>
+                <a href="/p/{{ page.slug }}" class="btn btn-outline-secondary" target="_blank"><i class="bi bi-eye"></i> Vista Previa de tu Página</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="bi bi-info-circle"></i> Información</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="fw-bold">Tu página pública:</h6>
+            <p class="text-break"><a href="/p/{{ page.slug }}" target="_blank">/p/{{ page.slug }}</a></p>
+
+            <hr>
+
+            <h6 class="fw-bold">Tips de diseño:</h6>
+            <ul class="small">
+              <li>Usa colores que contrasten bien entre sí</li>
+              <li>El header suele ser de un color llamativo</li>
+              <li>El fondo debe ser claro para facilitar la lectura</li>
+              <li>El footer generalmente es oscuro</li>
+              <li>Asegúrate de que el texto sea legible</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mt-3">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="bi bi-graph-up"></i> Estadísticas</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Productos:</span>
+              <strong>{{ current_user.products|length }}</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Cuenta creada:</span>
+              <small>{{ current_user.created_at.strftime('%d/%m/%Y') }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function selectColor(inputName, color, element) {
+      document.getElementById(inputName).value = color;
+      const parent = element.parentElement;
+      parent.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+    }
+
+    // Funciones para el panel de administración de limpieza automática
+    async function loadCleanupStats() {
+      try {
+        const button = document.querySelector('button[onclick="loadCleanupStats()"]');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="bi bi-hourglass-split"></i> Cargando...';
+        button.disabled = true;
+
+        const response = await fetch('/admin/cleanup/stats');
+        const data = await response.json();
+
+        if (data.success) {
+          document.getElementById('inactive-count').textContent = data.data.inactive_accounts;
+          document.getElementById('unused-categories-count').textContent = data.data.unused_categories;
+
+          // Cambiar colores de las badges según la cantidad
+          const inactiveElement = document.getElementById('inactive-count');
+          const categoriesElement = document.getElementById('unused-categories-count');
+
+          inactiveElement.className = data.data.inactive_accounts > 0 ? 'badge bg-danger' : 'badge bg-success';
+          categoriesElement.className = data.data.unused_categories > 0 ? 'badge bg-warning' : 'badge bg-success';
+        } else {
+          console.error('Error cargando estadísticas:', data.error);
+          document.getElementById('inactive-count').textContent = 'Error';
+          document.getElementById('unused-categories-count').textContent = 'Error';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('inactive-count').textContent = 'Error';
+        document.getElementById('unused-categories-count').textContent = 'Error';
+      } finally {
+        const button = document.querySelector('button[onclick="loadCleanupStats()"]');
+        button.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Actualizar Estadísticas';
+        button.disabled = false;
+      }
+    }
+
+    async function executeCleanup() {
+      // Confirmar acción
+      if (!confirm('¿Estás seguro de que deseas ejecutar la limpieza automática?\n\nEsta acción eliminará permanentemente:\n- Cuentas inactivas por más de 1 mes\n- Categorías no utilizadas por más de 1 semana\n\n¿Continuar?')) {
+        return;
+      }
+
+      try {
+        const button = document.getElementById('cleanup-btn');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="bi bi-hourglass-split"></i> Ejecutando...';
+        button.disabled = true;
+
+        const response = await fetch('/admin/cleanup/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ confirm: true })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          const timestamp = new Date(data.data.timestamp).toLocaleString('es-ES');
+          document.getElementById('cleanup-details').innerHTML = `
+            <small>
+              <strong>Fecha:</strong> ${timestamp}<br>
+              <strong>Cuentas eliminadas:</strong> ${data.data.deleted_accounts}<br>
+              <strong>Categorías eliminadas:</strong> ${data.data.deleted_categories}
+            </small>
+          `;
+          document.getElementById('cleanup-results').style.display = 'block';
+
+          // Actualizar estadísticas después de la limpieza
+          setTimeout(loadCleanupStats, 1000);
+
+          // Mostrar mensaje de éxito
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert alert-success alert-dismissible fade show mt-2';
+          alertDiv.innerHTML = `
+            <i class="bi bi-check-circle"></i> ${data.message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          `;
+          document.querySelector('.card-body').appendChild(alertDiv);
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error de conexión al ejecutar la limpieza');
+      } finally {
+        const button = document.getElementById('cleanup-btn');
+        button.innerHTML = '<i class="bi bi-trash"></i> Ejecutar Limpieza';
+        button.disabled = false;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.getElementById('cleanup-stats')) {
+        loadCleanupStats();
+      }
+    });
+
+    function updateFontPreview(size) {
+      document.getElementById('fontSizeValue').textContent = size + 'px';
+      document.getElementById('fontPreview').style.fontSize = size + 'px';
+    }
+  </script>
+</body>
+</html>

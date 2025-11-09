@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventario Online - Da Vincin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sticky-nav.css') }}">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 50%, #ffd3b6 100%);
+      --hero-bg: linear-gradient(180deg, #ffffff 0%, #fffbea 100%);
+    }
+
+    /* Sistema de colores sin JavaScript */
+    .bg-input { position: absolute; left: -9999px; }
+
+    #bg-white:checked ~ .page-wrapper {
+      --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+      --hero-bg: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    }
+    #bg-yellow:checked ~ .page-wrapper {
+      --bg-gradient: linear-gradient(135deg, #fff9c4 0%, #fff59d 50%, #ffecb3 100%);
+      --hero-bg: linear-gradient(180deg, #fffbf0 0%, #fff9c4 100%);
+    }
+    #bg-green:checked ~ .page-wrapper {
+      --bg-gradient: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+      --hero-bg: linear-gradient(180deg, #f1f8e9 0%, #e8f5e9 100%);
+    }
+    #bg-purple:checked ~ .page-wrapper {
+      --bg-gradient: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%);
+      --hero-bg: linear-gradient(180deg, #faf5fb 0%, #f3e5f5 100%);
+    }
+    #bg-pink:checked ~ .page-wrapper {
+      --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 50%, #f48fb1 100%);
+      --hero-bg: linear-gradient(180deg, #fdf2f8 0%, #fce4ec 100%);
+    }
+
+    /* Navegación superior */
+    .top-nav {
+      padding: 12px 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #495057;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 25px;
+      transition: all 0.3s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(129, 199, 132, 0.2);
+      color: #2e7d32;
+    }
+
+    .nav-links a.active {
+      background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%);
+      color: white;
+    }
+
+    .color-selector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-chips {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .chip {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .bg-input:checked + label .chip {
+      border-color: #495057;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    /* Buscador integrado */
+    .search-section {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-form input[type="search"] {
+      flex: 1;
+      padding: 12px 20px;
+      border: 2px solid #e9ecef;
+      border-radius: 25px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .search-form input[type="search"]:focus {
+      outline: none;
+      border-color: #81c784;
+      box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.1);
+    }
+
+    .search-form button {
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .search-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(129, 199, 132, 0.4);
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .main-content {
+      display: flex;
+      align-items: center;
+      min-height: calc(100vh - 120px);
+    }
+
+    .hero-section {
+      background: var(--hero-bg);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 60px;
+    }
+    .feature-icon {
+      font-size: 3rem;
+    }
+    .feature-card-1 {
+      background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+      padding: 20px;
+      border-radius: 15px;
+      transition: transform 0.3s;
+    }
+    .feature-card-1 .feature-icon {
+      color: #f9a825;
+    }
+    .feature-card-2 {
+      background: linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%);
+      padding: 20px;
+      border-radius: 15px;
+      transition: transform 0.3s;
+    }
+    .feature-card-2 .feature-icon {
+      color: #8e24aa;
+    }
+    .feature-card-3 {
+      background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%);
+      padding: 20px;
+      border-radius: 15px;
+      transition: transform 0.3s;
+    }
+    .feature-card-3 .feature-icon {
+      color: #d84315;
+    }
+    .feature-card-1:hover,
+    .feature-card-2:hover,
+    .feature-card-3:hover {
+      transform: translateY(-10px);
+    }
+    .btn-custom {
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+    .btn-custom:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .btn-primary.btn-custom {
+      background: linear-gradient(135deg, #a8e6cf 0%, #81c784 100%);
+      border: none;
+      color: #1b5e20;
+      font-weight: bold;
+    }
+    .btn-outline-secondary.btn-custom {
+      background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+      border: none;
+      color: #880e4f;
+      font-weight: bold;
+    }
+    .main-title {
+      background: linear-gradient(135deg, #81c784 0%, #ce93d8 50%, #ffab91 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media (max-width: 768px) {
+      .sticky-body {
+        padding-top: 90px;
+      }
+
+      .nav-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+
+      .nav-links {
+        order: 2;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .nav-links a {
+        padding: 8px 12px;
+        font-size: 14px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+      }
+
+      .color-selector {
+        order: 1;
+        justify-content: center;
+      }
+
+      .color-chips {
+        gap: 6px;
+      }
+
+      .chip {
+        width: 28px;
+        height: 28px;
+      }
+
+      .search-section {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+      }
+
+      .search-form {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .search-form input[type="search"] {
+        width: 100%;
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 15px 20px;
+      }
+
+      .search-form button {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+      }
+
+      .main-content {
+        min-height: calc(100vh - 140px);
+        padding: 20px 0;
+      }
+
+      .hero-section {
+        padding: 30px 15px;
+        border-radius: 15px;
+      }
+
+      .main-title {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin-bottom: 15px;
+      }
+
+      .hero-section p {
+        font-size: 16px;
+        margin-bottom: 25px;
+      }
+
+      .btn-custom {
+        padding: 12px 25px;
+        font-size: 1rem;
+        margin: 5px 0;
+        width: 100%;
+      }
+
+      .feature-card-1,
+      .feature-card-2,
+      .feature-card-3 {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+      }
+
+      .feature-card-1 h5,
+      .feature-card-2 h5,
+      .feature-card-3 h5 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .feature-card-1 p,
+      .feature-card-2 p,
+      .feature-card-3 p {
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .top-nav {
+        padding: 8px 0;
+      }
+
+      .nav-links a {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .chip {
+        width: 24px;
+        height: 24px;
+      }
+
+      .search-section {
+        padding: 10px;
+        margin-bottom: 15px;
+      }
+
+      .search-form input[type="search"] {
+        padding: 12px 15px;
+      }
+
+      .search-form button {
+        padding: 12px;
+      }
+
+      .hero-section {
+        padding: 20px 10px;
+        border-radius: 10px;
+      }
+
+      .main-title {
+        font-size: 1.5rem;
+      }
+
+      .hero-section p {
+        font-size: 14px;
+      }
+
+      .btn-custom {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .feature-icon {
+        font-size: 2rem;
+      }
+
+      .feature-card-1,
+      .feature-card-2,
+      .feature-card-3 {
+        padding: 12px;
+        border-radius: 10px;
+      }
+    }
+
+    /* Mejoras para pantallas táctiles */
+    @media (hover: none) and (pointer: coarse) {
+      .nav-links a:hover {
+        background: rgba(129, 199, 132, 0.3);
+        transform: none;
+      }
+
+      .search-form button:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(129, 199, 132, 0.3);
+      }
+
+      .btn-custom:hover {
+        transform: none;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      }
+
+      .feature-card-1:hover,
+      .feature-card-2:hover,
+      .feature-card-3:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      /* Asegurar áreas táctiles mínimas */
+      .nav-links a {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chip {
+        min-width: 44px;
+        min-height: 44px;
+      }
+    }
+
+    /* Mejoras adicionales para accesibilidad móvil */
+    @media (max-width: 768px) {
+      .search-form input[type="search"],
+      .search-form button {
+        min-height: 44px;
+      }
+
+      .btn-custom {
+        min-height: 48px;
+      }
+
+      /* Mejorar legibilidad */
+      .hero-section {
+        text-align: center;
+      }
+
+      .feature-card-1,
+      .feature-card-2,
+      .feature-card-3 {
+        text-align: center;
+      }
+
+      /* Espaciado vertical optimizado */
+      .row > [class*="col-"] {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Inputs para colores (ocultos) -->
+  <input class="bg-input" type="radio" name="bg" id="bg-white">
+  <input class="bg-input" type="radio" name="bg" id="bg-yellow">
+  <input class="bg-input" type="radio" name="bg" id="bg-green" checked>
+  <input class="bg-input" type="radio" name="bg" id="bg-purple">
+  <input class="bg-input" type="radio" name="bg" id="bg-pink">
+
+  <div class="page-wrapper">
+    <nav class="top-nav sticky-navigation">
+      <div class="container">
+        <div class="nav-content">
+          <div class="nav-links">
+            <a href="/" class="active"><i class="bi bi-house"></i> Inicio</a>
+            <a href="/register"><i class="bi bi-person-plus"></i> Crear Cuenta</a>
+            <a href="/login"><i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión</a>
+            <a href="/search"><i class="bi bi-search"></i> Visualizar páginas</a>
+            <a href="/support"><i class="bi bi-envelope"></i> Contactos de soporte</a>
+          </div>
+
+          <div class="color-selector">
+            <small class="text-muted me-2">
+              <i class="bi bi-palette-fill me-1"></i>Tema:
+            </small>
+            <div class="color-chips">
+              <label for="bg-white" title="Tema Blanco">
+                <div class="chip" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid #dee2e6;"></div>
+              </label>
+              <label for="bg-yellow" title="Tema Amarillo">
+                <div class="chip" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);"></div>
+              </label>
+              <label for="bg-green" title="Tema Verde">
+                <div class="chip" style="background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);"></div>
+              </label>
+              <label for="bg-purple" title="Tema Morado">
+                <div class="chip" style="background: linear-gradient(135deg, #f3e5f5 0%, #ce93d8 100%);"></div>
+              </label>
+              <label for="bg-pink" title="Tema Rosa">
+                <div class="chip" style="background: linear-gradient(135deg, #fce4ec 0%, #f48fb1 100%);"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="main-content sticky-body">
+      <div class="container">
+        <div class="hero-section">
+          <div class="text-center mb-5">
+            <i class="bi bi-shop-window" style="font-size: 3rem; color: #81c784;"></i>
+            <h1 class="display-3 fw-bold mt-3 main-title">Da Vincin</h1>
+            <p class="lead text-muted">Inventario Online - Tu tienda en línea en minutos</p>
+          </div>
+
+          <!-- Sección de búsqueda integrada -->
+          <div class="search-section">
+            <h5 class="mb-3"><i class="bi bi-search me-2"></i>Buscar en el sitio</h5>
+            <form class="search-form" action="/search" method="get">
+              <input type="search" name="q" placeholder="Buscar páginas, productos o contenido..." aria-label="Buscar">
+              <button type="submit"><i class="bi bi-search me-1"></i>Buscar</button>
+            </form>
+          </div>
+
+          <div class="row mb-5">
+            <div class="col-md-4 text-center mb-4">
+              <div class="feature-card-1">
+                <i class="bi bi-lightning-charge-fill feature-icon"></i>
+                <h5 class="mt-3 fw-bold">Rápido y Fácil</h5>
+                <p class="text-muted">Crea tu tienda sin conocimientos técnicos</p>
+              </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+              <div class="feature-card-2">
+                <i class="bi bi-palette-fill feature-icon"></i>
+                <h5 class="mt-3 fw-bold">Personalizable</h5>
+                <p class="text-muted">Logo, colores y productos a tu medida</p>
+              </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+              <div class="feature-card-3">
+                <i class="bi bi-graph-up-arrow feature-icon"></i>
+                <h5 class="mt-3 fw-bold">Gestión Total</h5>
+                <p class="text-muted">Control completo de tu inventario</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <a class="btn btn-primary btn-custom me-3" href="/register">
+              <i class="bi bi-person-plus"></i> Crear Cuenta
+            </a>
+            <a class="btn btn-outline-secondary btn-custom me-3" href="/login">
+              <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+            </a>
+            <a class="btn btn-outline-primary btn-custom" href="/search">
+              <i class="bi bi-search"></i> Explorar Tiendas
+            </a>
+          </div>
+
+          <div class="mt-5 text-center">
+            <small class="text-muted">
+              <i class="bi bi-shield-check"></i> Seguro y confiable
+            </small>
+            <div class="mt-2">
+              <small class="text-muted d-block">
+                <i class="bi bi-info-circle"></i> Infórmate sobre el tratamiento de datos en nuestro apartado de
+                <a href="/support" class="text-decoration-none">contacto y soporte</a>.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript para efectos de scroll en la navegación sticky
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbar = document.querySelector('.sticky-navigation');
+      let lastScrollTop = 0;
+
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+
+        lastScrollTop = scrollTop;
+      });
+    });
+  </script>
+</body>
+</html>

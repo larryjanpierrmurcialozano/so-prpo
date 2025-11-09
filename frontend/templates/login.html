@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Da Vincin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .card-custom {
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(102, 126, 234, 0.1);
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      border-radius: 25px;
+      color: #667eea !important;
+      text-decoration: none !important;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+      color: #5a67d8 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .back-link i {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .back-link:hover i {
+      transform: translateX(-3px);
+    }
+
+    /* Adaptaciones móviles */
+    @media (max-width: 768px) {
+      body {
+        align-items: flex-start;
+        padding: 20px 0;
+      }
+
+      .container {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .col-md-6 {
+        width: 100%;
+        max-width: none;
+      }
+
+      .card-custom {
+        border-radius: 15px;
+        margin-top: 20px;
+      }
+
+      .card-body {
+        padding: 30px 20px !important;
+      }
+
+      .back-link {
+        padding: 10px 16px;
+        font-size: 14px;
+        min-height: 44px;
+      }
+
+      .back-link i {
+        font-size: 18px;
+      }
+
+      .text-center i[style*="font-size: 3rem"] {
+        font-size: 2.5rem !important;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 15px !important;
+      }
+
+      .form-control-lg {
+        padding: 15px 20px;
+        font-size: 16px; /* Evita zoom en iOS */
+        border-radius: 12px;
+      }
+
+      .form-label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .btn-lg {
+        padding: 15px 25px;
+        font-size: 16px;
+        min-height: 50px;
+      }
+
+      .alert {
+        padding: 12px 15px;
+        font-size: 14px;
+        border-radius: 10px;
+      }
+
+      .mb-3, .mb-4 {
+        margin-bottom: 20px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .card-custom {
+        border-radius: 12px;
+        margin-top: 10px;
+      }
+
+      .card-body {
+        padding: 25px 15px !important;
+      }
+
+      .back-link {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      .text-center i[style*="font-size: 3rem"] {
+        font-size: 2rem !important;
+      }
+
+      .form-control-lg {
+        padding: 12px 15px;
+        font-size: 16px;
+      }
+
+      .btn-lg {
+        padding: 12px 20px;
+        font-size: 16px;
+      }
+    }
+
+    /* Mejoras para pantallas táctiles */
+    @media (hover: none) and (pointer: coarse) {
+      .back-link:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+      }
+
+      .back-link:hover i {
+        transform: none;
+      }
+
+      .form-control-lg:focus {
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      }
+
+      .btn:hover {
+        transform: none;
+      }
+
+      /* Asegurar áreas táctiles mínimas */
+      .back-link {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-lg {
+        min-height: 48px;
+      }
+    }
+
+    /* Mejoras adicionales para accesibilidad móvil */
+    @media (max-width: 768px) {
+      .form-control-lg {
+        border: 2px solid #e9ecef;
+        transition: all 0.3s;
+      }
+
+      .form-control-lg:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+      }
+
+      .alert {
+        margin-bottom: 20px;
+      }
+
+      /* Mejorar legibilidad */
+      .text-center p {
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
+
+      .text-center a {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card card-custom border-0">
+          <div class="card-body p-5">
+            <div class="text-start mb-3">
+              <a href="/" class="back-link">
+                <i class="bi bi-arrow-left"></i> Volver al inicio
+              </a>
+            </div>
+
+
+            <div class="text-center mb-4">
+              <i class="bi bi-box-arrow-in-right" style="font-size: 3rem; color: #667eea;"></i>
+              <h2 class="fw-bold mt-3">Iniciar Sesión</h2>
+              <p class="text-muted">Accede a tu panel de control</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form method="post">
+              <div class="mb-3">
+                <label class="form-label fw-bold"><i class="bi bi-person"></i> Usuario</label>
+                <input class="form-control form-control-lg" name="username" required placeholder="Tu nombre de usuario">
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-lock"></i> Contraseña</label>
+                <input class="form-control form-control-lg" name="password" type="password" required placeholder="Tu contraseña">
+              </div>
+              <div class="d-grid mb-3">
+                <button class="btn btn-primary btn-lg" style="border-radius: 50px;">
+                  <i class="bi bi-check-circle"></i> Ingresar
+                </button>
+              </div>
+              <div class="text-center">
+                <a href="/register" class="text-decoration-none">¿No tienes cuenta? <strong>Regístrate</strong></a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

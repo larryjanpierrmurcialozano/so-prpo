@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editar Producto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .navbar-brand {
+        font-size: 1.1rem;
+      }
+
+      .navbar-nav .nav-link {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .card {
+        margin-top: 15px;
+        border-radius: 12px;
+      }
+
+      .card-header {
+        padding: 15px 20px;
+      }
+
+      .card-header h4 {
+        font-size: 1.2rem;
+        margin-bottom: 0;
+      }
+
+      .card-body {
+        padding: 20px 15px;
+      }
+
+      .form-label {
+        font-size: 14px;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+
+      .form-control,
+      .form-select {
+        padding: 12px 15px;
+        font-size: 16px; /* Evita zoom en iOS */
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      .form-control-sm {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+
+      .btn-lg {
+        padding: 15px 25px;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      .btn-sm {
+        padding: 8px 15px;
+        font-size: 13px;
+      }
+
+      .product-image {
+        max-width: 150px !important;
+        max-height: 150px !important;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .border.rounded.p-3 {
+        padding: 15px !important;
+        border-radius: 8px !important;
+      }
+
+      .row .col-md-6 {
+        margin-bottom: 20px;
+      }
+
+      .form-check {
+        margin-bottom: 10px;
+      }
+
+      .form-check-label {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .form-check-input {
+        margin-top: 2px;
+      }
+
+      /* Navegación */
+      .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .nav-link {
+        margin: 2px 0;
+        border-radius: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .card-header {
+        padding: 12px 15px;
+      }
+
+      .card-header h4 {
+        font-size: 1.1rem;
+      }
+
+      .card-body {
+        padding: 15px 10px;
+      }
+
+      .form-control {
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+
+      .btn-lg {
+        padding: 12px 20px;
+        font-size: 15px;
+      }
+
+      .product-image {
+        max-width: 120px !important;
+        max-height: 120px !important;
+      }
+
+      /* Reorganizar grid en móviles pequeños */
+      .row .col-md-6 {
+        width: 100%;
+      }
+
+      .border.rounded.p-3 {
+        padding: 10px !important;
+      }
+
+      .form-check-label {
+        font-size: 13px;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+      }
+
+      .btn:hover {
+        transform: none;
+      }
+
+      /* Asegurar áreas táctiles mínimas */
+      .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn {
+        min-height: 44px;
+      }
+
+      .form-check-input {
+        min-width: 20px;
+        min-height: 20px;
+      }
+
+      .form-check-label {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        padding-left: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+        border-color: #86b7fe;
+      }
+
+      .text-muted {
+        color: #6c757d !important;
+        font-size: 12px;
+      }
+
+      /* Espaciado mejorado */
+      .mb-3, .mb-4 {
+        margin-bottom: 20px !important;
+      }
+
+      /* Mejor contraste en elementos pequeños */
+      .badge {
+        font-weight: 600;
+      }
+
+      small {
+        font-size: 12px;
+      }
+
+      /* Categorías más accesibles */
+      .form-check {
+        padding: 8px;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+      }
+
+      .form-check:hover {
+        background-color: rgba(0,0,0,0.02);
+      }
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="/"><i class="bi bi-shop"></i> Da Vincin</a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link active" href="/products/dashboard"><i class="bi bi-box-seam"></i> Productos</a>
+        <a class="nav-link" href="/settings"><i class="bi bi-gear"></i> Configuración</a>
+        <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Editar Producto</h4>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              <input type="hidden" name="version" value="{{ product.version }}">
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">Nombre del Producto</label>
+                <input type="text" class="form-control" name="name" value="{{ product.name }}" required maxlength="200">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">Descripción</label>
+                <textarea class="form-control" name="description" rows="4">{{ product.description }}</textarea>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-bold">Precio ($)</label>
+                  <input type="number" class="form-control" name="price" value="{{ product.price }}" step="0.01" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-bold">Cantidad en Inventario</label>
+                  <input type="number" class="form-control" name="quantity" value="{{ product.quantity }}" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">Imagen del Producto</label>
+                {% if product.image_url %}
+                  <div class="mb-3">
+                    <img src="{{ product.image_url }}" style="max-width:200px;max-height:200px;object-fit:cover" class="border rounded p-2 product-image" alt="Imagen actual">
+                    <p class="text-muted mt-2">Imagen actual</p>
+                  </div>
+                {% endif %}
+                <input type="file" class="form-control" name="image" accept="image/*">
+                <small class="text-muted">Deja en blanco para mantener la imagen actual</small>
+              </div>
+
+              <!-- Sección de Categorías -->
+              <div class="mb-4">
+                <label class="form-label fw-bold">Categorías</label>
+                <div class="border rounded p-3 bg-light">
+                  <div class="row">
+                    <!-- Categorías disponibles -->
+                    <div class="col-md-6">
+                      <h6 class="text-primary"><i class="bi bi-tags"></i> Categorías Disponibles</h6>
+                      <div id="categoriesContainerEdit" style="max-height: 200px; overflow-y: auto;">
+                        {% for category in available_categories %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                 name="categories" value="{{ category.id }}"
+                                 id="cat_{{ category.id }}"
+                                 {% if category in product.categories %}checked{% endif %}>
+                          <label class="form-check-label" for="cat_{{ category.id }}">
+                            {{ category.name }}
+                            {% if not category.is_default %}
+                            <small class="text-primary">(Personalizada)</small>
+                            {% endif %}
+                          </label>
+                          {% if category.description %}
+                          <br><small class="text-muted ms-3">{{ category.description }}</small>
+                          {% endif %}
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                    <!-- Crear nueva categoría -->
+                    <div class="col-md-6">
+                      <h6 class="text-success"><i class="bi bi-plus-circle"></i> Crear Nueva Categoría</h6>
+                      <div class="mb-2">
+                        <input type="text" class="form-control form-control-sm"
+                               id="newCategoryName" placeholder="Nombre de la categoría">
+                      </div>
+                      <div class="mb-2">
+                        <textarea class="form-control form-control-sm"
+                                  id="newCategoryDescription"
+                                  placeholder="Descripción (opcional)" rows="2"></textarea>
+                      </div>
+                      <button type="button" class="btn btn-success btn-sm" onclick="createNewCategory()">
+                        <i class="bi bi-plus"></i> Crear y Añadir
+                      </button>
+
+                      <!-- Categorías seleccionadas -->
+                      <div class="mt-3">
+                        <h6 class="text-info"><i class="bi bi-check-circle"></i> Categorías Seleccionadas</h6>
+                        <div id="selectedCategories">
+                          {% for category in product.categories %}
+                          <span class="badge bg-primary me-1 mb-1">{{ category.name }}</span>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-check-circle"></i> Guardar Cambios</button>
+                <a href="/products/dashboard" class="btn btn-outline-secondary">Cancelar</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="messageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function updateSelectedCategories() {
+      const selectedDiv = document.getElementById('selectedCategories');
+      const checkboxes = document.querySelectorAll('input[name="categories"]:checked');
+
+      selectedDiv.innerHTML = '';
+      checkboxes.forEach(checkbox => {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`).textContent.trim();
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-primary me-1 mb-1';
+        badge.textContent = label;
+        selectedDiv.appendChild(badge);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkboxes = document.querySelectorAll('input[name="categories"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCategories);
+      });
+    });
+
+    // Funciones para mostrar mensajes flotantes
+    function showSuccessMessage(message) {
+      showMessage(message, 'success');
+    }
+
+    function showErrorMessage(message) {
+      showMessage(message, 'danger');
+    }
+
+    function showMessage(message, type) {
+      const messageContainer = document.getElementById('messageContainer');
+      const alertId = 'alert-' + Date.now();
+
+      const alertHtml = `
+        <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+          <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      `;
+
+      messageContainer.insertAdjacentHTML('beforeend', alertHtml);
+
+      setTimeout(() => {
+        const alert = document.getElementById(alertId);
+        if (alert) {
+          alert.remove();
+        }
+      }, 10000);
+    }
+
+    async function createNewCategory() {
+      const name = document.getElementById('newCategoryName').value.trim();
+      const description = document.getElementById('newCategoryDescription').value.trim();
+
+      if (!name) {
+        showErrorMessage('El nombre de la categoría es requerido');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/categories/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, description })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          const categoriesContainer = document.getElementById('categoriesContainerEdit');
+
+          const newCategoryHtml = `
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     name="categories" value="${result.category.id}"
+                     id="cat_${result.category.id}" checked>
+              <label class="form-check-label" for="cat_${result.category.id}">
+                ${result.category.name}
+                <small class="text-success">(Recién creada)</small>
+              </label>
+              ${result.category.description ? `<br><small class="text-muted ms-3">${result.category.description}</small>` : ''}
+            </div>
+          `;
+
+          categoriesContainer.insertAdjacentHTML('beforeend', newCategoryHtml);
+
+          // Añadir event listener al nuevo checkbox
+          const newCheckbox = document.getElementById(`cat_${result.category.id}`);
+          newCheckbox.addEventListener('change', updateSelectedCategories);
+
+          // Limpiar formulario
+          document.getElementById('newCategoryName').value = '';
+          document.getElementById('newCategoryDescription').value = '';
+
+          // Actualizar categorías seleccionadas
+          updateSelectedCategories();
+
+          showSuccessMessage(`Categoría "${name}" creada y añadida exitosamente`);
+        } else {
+          showErrorMessage(result.error || 'Error al crear la categoría');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showErrorMessage('Error de conexión al crear la categoría');
+      }
+    }
+  </script>
+</body>
+</html>

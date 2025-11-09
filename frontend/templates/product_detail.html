@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ product.name }} - {{ product.owner.page.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --color-bg: {{ product.owner.page.color_bg }};
+            --color-text: {{ product.owner.page.color_text }};
+            --color-header: {{ product.owner.page.color_header }};
+            --color-footer: {{ product.owner.page.color_footer }};
+            --font-size: {{ product.owner.page.font_size or 16 }}px;
+        }
+
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: var(--font-size);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-header) 0%, var(--color-header) 100%);
+            color: white;
+            padding: 25px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-bottom: 4px solid rgba(255,255,255,0.2);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.8rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header img {
+            border: 3px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+
+        .product-card {
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 200% 100%;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .product-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 3px solid #e0e0e0;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+
+        .product-image:hover {
+            transform: scale(1.02);
+        }
+
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #28a745;
+            text-shadow: 2px 2px 4px rgba(40,167,69,0.15);
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 15px 25px;
+            border-radius: 15px;
+            display: inline-block;
+            border: 2px solid #28a745;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.2);
+        }
+
+        .category-badge {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: white;
+            padding: 8px 16px;
+            border: 2px solid #9333ea;
+            border-radius: 20px;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(168,85,247,0.5);
+            transition: all 0.3s;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .category-badge:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            border: 2px solid #9333ea;
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(168,85,247,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            color: white;
+            box-shadow: 0 6px 20px rgba(124,58,237,0.7);
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        }
+
+        .contact-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 8px 8px 0;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .contact-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 22px rgba(102,126,234,0.5);
+            background: linear-gradient(135deg, #5568d3 0%, #6a4291 100%);
+        }
+
+        .badge {
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .alert {
+            border-radius: 15px;
+            border: 2px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        }
+
+        .alert-info {
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, var(--color-footer) 0%, var(--color-footer) 100%);
+            color: var(--color-text);
+            padding: 40px 0;
+            margin-top: auto;
+            box-shadow: 0 -8px 25px rgba(0,0,0,0.15);
+            border-top: 4px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+
+        .footer p,
+        .footer a {
+            color: var(--color-text);
+        }
+
+        .footer a {
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer a:hover {
+            opacity: 0.8;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        hr {
+            border: none;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #dee2e6, transparent);
+            opacity: 0.6;
+            margin: 30px 0;
+        }
+
+        h2, h4, h5, h6 {
+            color: var(--color-text);
+            font-weight: 700;
+        }
+
+        h4 {
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+
+        .description-text {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: var(--color-text);
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Adaptaciones móviles */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .header {
+                padding: 20px 0;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .product-card {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .product-image {
+                max-height: 300px;
+                margin-bottom: 20px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .price-tag {
+                font-size: 2rem;
+                margin-bottom: 15px;
+                padding: 12px 20px;
+            }
+
+            .back-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-height: 44px;
+            }
+
+            .contact-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-height: 44px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .badge {
+                font-size: 14px;
+                padding: 10px 18px;
+            }
+
+            .category-badge {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start !important;
+            }
+
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            h4 {
+                font-size: 1.3rem;
+            }
+
+            .description-text {
+                font-size: 1rem;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-image {
+                max-height: 250px;
+                border-radius: 12px;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .price-tag {
+                font-size: 1.8rem;
+                padding: 10px 16px;
+            }
+
+            .back-btn, .contact-btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+
+            .description-text {
+                font-size: 0.95rem;
+                padding: 15px;
+            }
+        }
+
+        /* Mejoras para pantallas táctiles */
+        @media (hover: none) and (pointer: coarse) {
+            .back-btn:hover,
+            .contact-btn:hover {
+                transform: none;
+            }
+
+            .product-image:hover {
+                transform: none;
+            }
+
+            .back-btn,
+            .contact-btn {
+                min-height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    {% if product.owner.page.logo_url %}
+                        <img src="{{ product.owner.page.logo_url }}" alt="{{ product.owner.page.title }}" style="height: {{ product.owner.page.logo_size }}px; margin-right: 15px; border-radius: calc(var(--border-radius) / 2);">
+                    {% endif %}
+                    <h1 class="mb-0">{{ product.owner.page.title }}</h1>
+                </div>
+                <a href="/p/{{ product.owner.page.slug }}" class="back-btn">
+                    <i class="bi bi-arrow-left"></i> Volver a la tienda
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container my-5">
+        <div class="product-card">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    {% if product.image_url %}
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-image">
+                    {% else %}
+                        <div class="product-image d-flex align-items-center justify-content-center" style="background: var(--color-bg); min-height: 400px;">
+                            <i class="bi bi-image" style="font-size: 4rem; color: var(--color-border);"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                    {% if product.categories %}
+                    <div class="mb-3">
+                        <h6 style="color: var(--color-text); opacity: 0.7;">Categorías:</h6>
+                        {% for category in product.categories %}
+                            <span class="category-badge">{{ category.name }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <h2 class="fw-bold mb-3">{{ product.name }}</h2>
+
+                    <div class="mb-4">
+                        <span class="price-tag">
+                            $ {{ product.price }}
+                        </span>
+                    </div>
+
+                    <div class="mb-4">
+                        {% if product.quantity > 0 %}
+                            <span class="badge bg-success fs-6">
+                                <i class="bi bi-check-circle"></i> En stock ({{ product.quantity }} disponibles)
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger fs-6">
+                                <i class="bi bi-x-circle"></i> Agotado
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    {% if product.owner.page.phone_number or product.owner.page.facebook_url %}
+                    <div class="mt-4">
+                        <h5><i class="bi bi-telephone-fill"></i> Contactar al vendedor</h5>
+                        <p style="color: var(--color-text); opacity: 0.8;">Para consultas o pedidos, puedes contactar directamente:</p>
+
+                        {% if product.owner.page.phone_number %}
+                        <a href="tel:{{ product.owner.page.phone_number }}" class="contact-btn">
+                            <i class="bi bi-phone"></i> Llamar {{ product.owner.page.phone_number }}
+                        </a>
+                        {% endif %}
+
+                        {% if product.owner.page.facebook_url %}
+                        <a href="{{ product.owner.page.facebook_url }}" target="_blank" class="contact-btn">
+                            <i class="bi bi-facebook"></i> Facebook
+                        </a>
+                        {% endif %}
+
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-info-circle"></i>
+                            Puedes contactar al dueño de la página para consultar productos o hacer pedidos.
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if product.description %}
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-12">
+                    <h4><i class="bi bi-text-paragraph"></i> Descripción completa</h4>
+                    <div class="mt-3 description-text">
+                        {{ product.description|replace('\n', '<br>')|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="mb-2" style="color: var(--color-text);">&copy; {{ product.owner.page.title }} - Creado con Da Vincin</p>
+            {% if product.owner.page.phone_number or product.owner.page.facebook_url %}
+            <div class="mt-3">
+                {% if product.owner.page.phone_number %}
+                <a href="tel:{{ product.owner.page.phone_number }}" style="color: var(--color-text);" class="me-3">
+                    <i class="bi bi-phone"></i> {{ product.owner.page.phone_number }}
+                </a>
+                {% endif %}
+                {% if product.owner.page.facebook_url %}
+                <a href="{{ product.owner.page.facebook_url }}" target="_blank" style="color: var(--color-text);">
+                    <i class="bi bi-facebook"></i> Facebook
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

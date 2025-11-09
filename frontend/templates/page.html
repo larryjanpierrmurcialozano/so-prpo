@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --color-bg: {{ page.color_bg }};
+      --color-text: {{ page.color_text }};
+      --color-header: {{ page.color_header }};
+      --color-footer: {{ page.color_footer }};
+      --font-size: {{ page.font_size or 16 }}px;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: var(--font-size);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, var(--color-header) 0%, var(--color-header) 100%);
+      padding: 40px 0;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border-bottom: 4px solid rgba(255,255,255,0.2);
+      position: relative;
+    }
+
+    .header-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    }
+
+    .header-section h1,
+    .header-section p {
+      color: var(--color-text);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-container img {
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      border: 3px solid rgba(255,255,255,0.3);
+      transition: transform 0.3s;
+    }
+
+    .logo-container img:hover {
+      transform: scale(1.05);
+    }
+
+    .product-card {
+      transition: all 0.4s ease;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+      background-size: 200% 100%;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+    }
+
+    .product-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 12px 35px rgba(102,126,234,0.25);
+      border-color: #667eea;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-bottom: 3px solid #f0f0f0;
+    }
+
+    .product-card .card-body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding: 20px;
+      background: white;
+    }
+
+    .product-description {
+      flex-grow: 1;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      color: #2d3748;
+    }
+
+    .price-tag {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #28a745;
+      text-shadow: 1px 1px 2px rgba(40,167,69,0.1);
+    }
+
+    .stock-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 10;
+    }
+
+    .stock-badge .badge {
+      border-radius: 20px;
+      padding: 8px 12px;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .category-badge {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      padding: 6px 12px;
+      border: 2px solid #9333ea;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 2px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(168,85,247,0.5);
+      transition: all 0.3s;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .category-badge:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(124,58,237,0.7);
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #6a4291 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102,126,234,0.5);
+    }
+
+    .empty-state {
+      padding: 100px 20px;
+      text-align: center;
+      flex: 1;
+      color: var(--color-text);
+    }
+
+    .empty-state i {
+      color: var(--color-text);
+      opacity: 0.5;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .empty-state h3,
+    .empty-state p {
+      color: var(--color-text);
+    }
+
+    .main-content {
+      flex: 1;
+      padding-bottom: 50px;
+    }
+
+    .footer-section {
+      background: linear-gradient(135deg, var(--color-footer) 0%, var(--color-footer) 100%);
+      color: var(--color-text);
+      padding: 40px 0;
+      margin-top: auto;
+      box-shadow: 0 -8px 25px rgba(0,0,0,0.15);
+      border-top: 4px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .footer-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    }
+
+    .footer-section h5,
+    .footer-section h6,
+    .footer-section p,
+    .footer-section small {
+      color: var(--color-text);
+    }
+
+    .footer-section a {
+      color: var(--color-text);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .footer-section a:hover {
+      opacity: 0.8;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-outline-light {
+      border-radius: 10px;
+      border: 2px solid var(--color-text);
+      color: var(--color-text);
+      padding: 10px 20px;
+      transition: all 0.3s;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn-outline-light:hover {
+      background: var(--color-text);
+      color: var(--color-footer);
+      border-color: var(--color-text);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    hr {
+      border-color: var(--color-text);
+      opacity: 0.3;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-text), transparent);
+    }
+
+    /* Adaptaciones móviles */
+    @media (max-width: 768px) {
+      .header-section {
+        padding: 25px 0;
+        margin-bottom: 25px;
+      }
+
+      .logo-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+
+      .logo-container img {
+        max-width: 120px !important;
+        height: auto !important;
+      }
+
+      h1 {
+        font-size: 1.8rem !important;
+        margin-bottom: 10px;
+      }
+
+      .container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .product-card {
+        margin-bottom: 20px;
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 30px rgba(102,126,234,0.2);
+      }
+
+      .product-img {
+        height: 200px;
+      }
+
+      .product-card .card-body {
+        padding: 15px;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+        color: #2d3748 !important;
+      }
+
+      .card-text {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #2d3748 !important;
+      }
+
+      .price-tag {
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+        width: 100%;
+      }
+
+      .footer-section {
+        padding: 30px 0;
+        text-align: center;
+      }
+
+      .empty-state {
+        padding: 60px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .header-section {
+        padding: 20px 0;
+      }
+
+      .logo-container img {
+        max-width: 100px !important;
+      }
+
+      h1 {
+        font-size: 1.5rem !important;
+      }
+
+      .product-img {
+        height: 180px;
+      }
+
+      .product-card .card-body {
+        padding: 12px;
+      }
+
+      .card-title {
+        font-size: 1rem;
+        color: #2d3748 !important;
+      }
+
+      .card-text {
+        font-size: 13px;
+        color: #2d3748 !important;
+      }
+
+      .price-tag {
+        font-size: 1.3rem;
+      }
+
+      .category-badge {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+      }
+    }
+
+    /* Mejoras para pantallas táctiles */
+    @media (hover: none) and (pointer: coarse) {
+      .product-card:hover {
+        transform: none;
+        box-shadow: 0 12px 35px rgba(102,126,234,0.25);
+      }
+
+      .btn {
+        min-height: 44px;
+      }
+
+      .btn-primary:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-section">
+    <div class="container">
+      <div class="logo-container">
+        {% if page.logo_url %}
+          <img src="{{ page.logo_url }}" alt="{{ page.title }}" style="height:{{ page.logo_size }}px;" class="img-fluid">
+        {% endif %}
+        <div>
+          <h1 class="display-4 fw-bold mb-0">{{ page.title }}</h1>
+          <p class="lead mb-0" style="opacity: 0.95;">Bienvenido a mi tienda en línea</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="container mb-5">
+      {% if products %}
+      <div class="row g-4">
+        {% for p in products %}
+        <div class="col-md-6 col-lg-4 col-xl-3">
+          <div class="card product-card position-relative h-100">
+            <div class="stock-badge">
+              {% if p.quantity > 0 %}
+                <span class="badge bg-success">
+                  <i class="bi bi-check-circle"></i> En Stock
+                </span>
+              {% else %}
+                <span class="badge bg-danger">
+                  <i class="bi bi-x-circle"></i> Agotado
+                </span>
+              {% endif %}
+            </div>
+
+            {% if p.image_url %}
+              <img src="{{ p.image_url }}" class="product-img" alt="{{ p.name }}">
+            {% else %}
+              <div class="product-img d-flex align-items-center justify-content-center" style="background: var(--color-bg);">
+                <i class="bi bi-image" style="font-size: 3rem; color: var(--color-border);"></i>
+              </div>
+            {% endif %}
+
+            <div class="card-body d-flex flex-column">
+              {% if p.categories %}
+              <div class="mb-2">
+                {% for category in p.categories %}
+                  <span class="category-badge">{{ category.name }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <h5 class="card-title fw-bold mb-2" style="color: var(--color-text);">{{ p.name }}</h5>
+
+              {% if p.description %}
+                <p class="card-text product-description" style="color: var(--color-text); opacity: 0.8;">
+                  {% if p.description|length > 100 %}
+                    {{ p.description[:100] }}...
+                  {% else %}
+                    {{ p.description }}
+                  {% endif %}
+                </p>
+              {% else %}
+                <p class="card-text flex-grow-1" style="color: var(--color-text); opacity: 0.6;">Sin descripción disponible</p>
+              {% endif %}
+
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="price-tag">$ {{ p.price }}</span>
+                </div>
+                <a href="/products/{{ p.id }}/view" class="btn btn-primary w-100">
+                  <i class="bi bi-eye"></i> Ver detalles
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-shop-window" style="font-size: 5rem;"></i>
+        <h3 class="mt-4">Próximamente</h3>
+        <p class="lead">Esta tienda aún no tiene productos disponibles.</p>
+        <p>Vuelve pronto para ver nuestras novedades</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <footer class="footer-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <h5 class="mb-3">
+            <i class="bi bi-shop"></i> {{ page.title }}
+          </h5>
+          <p class="mb-3" style="opacity: 0.9;">Tu tienda en línea de confianza</p>
+
+          {% if page.phone_number or page.facebook_url %}
+          <div class="mt-3">
+            <h6 class="mb-2"><i class="bi bi-telephone-fill"></i> Contáctanos</h6>
+            {% if page.phone_number %}
+            <p class="mb-2">
+              <a href="tel:{{ page.phone_number }}" style="color: var(--color-text); text-decoration: none;">
+                <i class="bi bi-phone"></i> {{ page.phone_number }}
+              </a>
+            </p>
+            {% endif %}
+            {% if page.facebook_url %}
+            <p class="mb-2">
+              <a href="{{ page.facebook_url }}" target="_blank" style="color: var(--color-text); text-decoration: none;">
+                <i class="bi bi-facebook"></i> Síguenos en Facebook
+              </a>
+            </p>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6 text-md-end">
+          {% if page.phone_number or page.facebook_url %}
+          <div class="mb-3">
+            <h6 class="mb-3">¿Tienes preguntas?</h6>
+            {% if page.phone_number %}
+            <a href="tel:{{ page.phone_number }}" class="btn btn-outline-light btn-sm me-2 mb-2">
+              <i class="bi bi-phone"></i> Llamar
+            </a>
+            {% endif %}
+            {% if page.facebook_url %}
+            <a href="{{ page.facebook_url }}" target="_blank" class="btn btn-outline-light btn-sm mb-2">
+              <i class="bi bi-facebook"></i> Facebook
+            </a>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <p class="mb-2" style="opacity: 0.9;">Powered by Da Vincin</p>
+          <p class="mb-0">
+            <small style="opacity: 0.8;">Crea tu tienda en línea fácil y rápido</small>
+          </p>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="text-center">
+        <small style="opacity: 0.9;">© 2025 {{ page.title }}. Todos los derechos reservados.</small>
+        {% if page.phone_number %}
+        <br><small style="opacity: 0.7;">Para consultas y pedidos: {{ page.phone_number }}</small>
+        {% endif %}
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

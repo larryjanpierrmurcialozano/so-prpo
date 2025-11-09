@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de Control</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .product-thumbnail {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .stat-card {
+      transition: transform 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    .product-description-cell {
+      max-width: 250px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .table tbody tr {
+      vertical-align: middle;
+    }
+
+    /* Adaptaciones móviles */
+    @media (max-width: 768px) {
+      .container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .navbar-brand {
+        font-size: 1.1rem;
+      }
+
+      .navbar-nav .nav-link {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .navbar-toggler {
+        padding: 4px 6px;
+        font-size: 1rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      /* Tarjetas de estadísticas */
+      .stat-card {
+        margin-bottom: 15px;
+      }
+
+      .stat-card .card-body {
+        padding: 15px;
+      }
+
+      .stat-card h6 {
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+
+      .stat-card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+      }
+
+      .stat-card i {
+        font-size: 2rem !important;
+      }
+
+      /* Formulario de producto */
+      .card-header h4 {
+        font-size: 1.2rem;
+      }
+
+      .form-label {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .form-control,
+      .form-select {
+        padding: 12px 15px;
+        font-size: 16px; /* Evita zoom en iOS */
+      }
+
+      .form-control-sm {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+
+      .btn-lg {
+        padding: 12px 20px;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      .btn-sm {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      /* Sección de categorías */
+      .border.rounded.p-3 {
+        padding: 15px !important;
+      }
+
+      .row .col-md-6 {
+        margin-bottom: 20px;
+      }
+
+      .form-check {
+        margin-bottom: 8px;
+      }
+
+      .form-check-label {
+        font-size: 14px;
+      }
+
+      /* Tabla responsive mejorada */
+      .table-responsive {
+        border-radius: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .table th,
+      .table td {
+        padding: 8px 6px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .product-thumbnail {
+        width: 40px;
+        height: 40px;
+      }
+
+      .product-description-cell {
+        max-width: 100px;
+        font-size: 11px;
+      }
+
+      .badge {
+        font-size: 10px;
+        padding: 3px 6px;
+      }
+
+      .btn-group .btn {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+
+      .btn-group .btn i {
+        font-size: 12px;
+      }
+
+      /* Alertas */
+      .alert {
+        padding: 10px 15px;
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .card {
+        margin-bottom: 15px;
+      }
+
+      .card-body {
+        padding: 15px;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+      }
+
+      /* Tarjetas de estadísticas más compactas */
+      .stat-card .card-body {
+        padding: 12px;
+      }
+
+      .stat-card h2 {
+        font-size: 1.3rem;
+      }
+
+      .stat-card i {
+        font-size: 1.5rem !important;
+      }
+
+      /* Formulario más compacto */
+      .form-control {
+        padding: 10px 12px;
+      }
+
+      .btn-lg {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+
+      /* Reorganizar formulario en móvil */
+      .row .col-md-3,
+      .row .col-md-4,
+      .row .col-md-6,
+      .row .col-md-8 {
+        margin-bottom: 15px;
+      }
+
+      /* Tabla ultra-compacta para móviles pequeños */
+      .table th,
+      .table td {
+        padding: 5px 3px;
+        font-size: 10px;
+      }
+
+      .product-thumbnail {
+        width: 30px;
+        height: 30px;
+      }
+
+      .product-description-cell {
+        max-width: 80px;
+        font-size: 10px;
+      }
+
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .btn-group .btn {
+        width: 100%;
+        padding: 3px 6px;
+        font-size: 10px;
+      }
+    }
+
+    /* Mejoras para pantallas táctiles */
+    @media (hover: none) and (pointer: coarse) {
+      .stat-card:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      .btn:hover {
+        transform: none;
+      }
+
+      .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+      }
+
+      /* Asegurar áreas táctiles mínimas */
+      .navbar-toggler {
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+
+      .btn {
+        min-height: 40px;
+      }
+
+      .btn-sm {
+        min-height: 36px;
+      }
+
+      .form-check-input {
+        min-width: 20px;
+        min-height: 20px;
+      }
+    }
+
+    /* Mejoras adicionales para accesibilidad móvil */
+    @media (max-width: 768px) {
+      .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      }
+
+      .navbar-collapse {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .table-responsive {
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+      }
+
+      /* Mejorar contraste en elementos pequeños */
+      .badge {
+        font-weight: 600;
+      }
+
+      .text-muted {
+        color: #6c757d !important;
+      }
+
+      /* Cards con mejor espaciado */
+      .card + .card {
+        margin-top: 20px;
+      }
+
+      /* Footer responsive */
+      footer {
+        margin-top: 30px !important;
+        padding: 20px 0 !important;
+      }
+
+      footer p {
+        font-size: 12px;
+      }
+    }
+
+    /* Ocultar columnas menos importantes en móviles muy pequeños */
+    @media (max-width: 576px) {
+      .table th:nth-child(3),
+      .table td:nth-child(3),
+      .table th:nth-child(4),
+      .table td:nth-child(4) {
+        display: none;
+      }
+
+      .table-responsive::after {
+        content: "Desliza horizontalmente para ver más →";
+        display: block;
+        text-align: center;
+        font-size: 11px;
+        color: #6c757d;
+        padding: 8px;
+        background: #f8f9fa;
+      }
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/"><i class="bi bi-shop"></i> Da Vincin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="/products/dashboard"><i class="bi bi-box-seam"></i> Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/settings"><i class="bi bi-gear"></i> Configuración</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/p/{{ current_user.page.slug }}" target="_blank"><i class="bi bi-eye"></i> Ver Página</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Salir</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row mb-4">
+      <div class="col">
+        <h2 class="fw-bold"><i class="bi bi-person-circle"></i> Bienvenido, {{ current_user.username }}</h2>
+        <p class="text-muted">Gestiona tu inventario y configuración desde aquí</p>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-sm stat-card border-0">
+          <div class="card-body bg-primary text-white rounded">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1">Total Productos</h6>
+                <h2 class="mb-0 fw-bold">{{ products|length }}</h2>
+              </div>
+              <i class="bi bi-box-seam" style="font-size: 3rem; opacity: 0.5;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-sm stat-card border-0">
+          <div class="card-body bg-success text-white rounded">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1">En Stock</h6>
+                <h2 class="mb-0 fw-bold">{{ products|selectattr('quantity', 'gt', 0)|list|length }}</h2>
+              </div>
+              <i class="bi bi-check-circle" style="font-size: 3rem; opacity: 0.5;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-sm stat-card border-0">
+          <div class="card-body bg-warning text-white rounded">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1">Agotados</h6>
+                <h2 class="mb-0 fw-bold">{{ products|selectattr('quantity', 'eq', 0)|list|length }}</h2>
+              </div>
+              <i class="bi bi-exclamation-triangle" style="font-size: 3rem, opacity: 0.5;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            <i class="bi bi-info-circle"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-white">
+        <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Agregar Nuevo Producto</h4>
+      </div>
+      <div class="card-body">
+        <form method="post" action="/products/" enctype="multipart/form-data" onsubmit="return handleProductSubmit(this)">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Nombre del Producto</label>
+              <input class="form-control" name="name" id="productName" placeholder="Ej: Laptop HP Pavilion" required>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label fw-bold">Precio ($)</label>
+              <input class="form-control" name="price" placeholder="0.00" type="number" step="0.01" required>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label fw-bold">Cantidad</label>
+              <input class="form-control" name="quantity" placeholder="0" type="number" value="0">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label class="form-label fw-bold">Descripción</label>
+              <textarea class="form-control" name="description" placeholder="Describe tu producto..." rows="2"></textarea>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label fw-bold">Imagen</label>
+              <input class="form-control" name="image" type="file" accept="image/*">
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold">Categorías</label>
+            <div class="border rounded p-3 bg-light">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="text-primary"><i class="bi bi-tags"></i> Categorías Disponibles</h6>
+                  <div id="categoriesContainerCreate" style="max-height: 200px; overflow-y: auto;">
+                    {% for category in available_categories %}
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                             name="categories" value="{{ category.id }}"
+                             id="new_cat_{{ category.id }}"
+                             onchange="updateSelectedCategoriesCreate()">
+                      <label class="form-check-label" for="new_cat_{{ category.id }}">
+                        {{ category.name }}
+                        {% if not category.is_default %}
+                        <small class="text-primary">(Personalizada)</small>
+                        {% endif %}
+                      </label>
+                      {% if category.description %}
+                      <br><small class="text-muted ms-3">{{ category.description }}</small>
+                      {% endif %}
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <h6 class="text-success"><i class="bi bi-plus-circle"></i> Crear Nueva Categoría</h6>
+                  <div class="mb-3">
+                    <input type="text" class="form-control form-control-sm" id="newCategoryName" placeholder="Nombre de la categoría">
+                  </div>
+                  <div class="mb-3">
+                    <textarea class="form-control form-control-sm" id="newCategoryDescription" placeholder="Descripción (opcional)" rows="2"></textarea>
+                  </div>
+                  <button type="button" class="btn btn-success btn-sm" onclick="createNewCategoryDashboard()">
+                    <i class="bi bi-plus"></i> Crear y Agregar
+                  </button>
+
+                  <div class="mt-3">
+                    <h6 class="text-info"><i class="bi bi-check-circle"></i> Categorías Seleccionadas</h6>
+                    <div id="selectedCategoriesCreate">
+                      <small class="text-muted">Ninguna categoría seleccionada</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-lg"><i class="bi bi-check-circle"></i> Agregar Producto</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-header bg-white">
+        <h4 class="mb-0"><i class="bi bi-list-ul"></i> Inventario de Productos</h4>
+      </div>
+      <div class="card-body p-0">
+        {% if products %}
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Categorías</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for p in products %}
+            <tr>
+              <td>
+                {% if p.image_url %}
+                  <img src="{{ p.image_url }}" class="product-thumbnail" alt="{{ p.name }}">
+                {% else %}
+                  <div class="product-thumbnail bg-secondary d-flex align-items-center justify-content-center text-white">
+                    <i class="bi bi-image"></i>
+                  </div>
+                {% endif %}
+              </td>
+              <td class="align-middle fw-bold">{{ p.name }}</td>
+
+              <td class="align-middle">
+                {% if p.categories %}
+                  {% for category in p.categories %}
+                    <span class="badge bg-primary me-1 mb-1" style="font-size: 0.75rem;">{{ category.name }}</span>
+                  {% endfor %}
+                {% else %}
+                  <small class="text-muted">Sin categoría</small>
+                {% endif %}
+              </td>
+
+              <td class="align-middle product-description-cell text-muted">
+                {% if p.description %}
+                  {% if p.description|length > 50 %}
+                    {{ p.description[:50] }}...
+                    <br><a href="/products/{{ p.id }}/view" class="text-primary text-decoration-none" target="_blank">
+                      <small><i class="bi bi-eye"></i> Ver completa</small>
+                    </a>
+                  {% else %}
+                    {{ p.description }}
+                  {% endif %}
+                {% else %}
+                  <em>Sin descripción</em>
+                {% endif %}
+              </td>
+
+              <td class="align-middle"><span class="badge bg-success fs-6">${{ p.price }}</span></td>
+              <td class="align-middle">
+                {% if p.quantity > 0 %}
+                  <span class="badge bg-success">{{ p.quantity }}</span>
+                {% else %}
+                  <span class="badge bg-danger">Agotado</span>
+                {% endif %}
+              </td>
+              <td class="align-middle">
+                <div class="btn-group" role="group">
+                  <a href="/products/{{ p.id }}/edit" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i> Editar
+                  </a>
+                  <form method="post" action="/products/{{ p.id }}/delete" style="display:inline" onsubmit="return confirmDelete('{{ p.name }}', this)">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+          <i class="bi bi-inbox" style="font-size: 4rem; color: #ddd;"></i>
+          <p class="text-muted mt-3">No hay productos. ¡Crea tu primer producto arriba!</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-5 py-4 bg-white border-top">
+    <div class="container text-center text-muted">
+      <p class="mb-0">Da Vincin - Inventario Online © 2025</p>
+    </div>
+  </footer>
+
+  <div id="messageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function updateSelectedCategoriesCreate() {
+      const checkboxes = document.querySelectorAll('input[name="categories"]:checked');
+      const selectedDiv = document.getElementById('selectedCategoriesCreate');
+
+      if (checkboxes.length === 0) {
+        selectedDiv.innerHTML = '<small class="text-muted">Ninguna categoría seleccionada</small>';
+      } else {
+        let html = '';
+        checkboxes.forEach(checkbox => {
+          const label = document.querySelector(`label[for="${checkbox.id}"]`);
+          const categoryName = label.textContent.trim().split('(')[0].trim();
+          html += `<span class="badge bg-primary me-1 mb-1">${categoryName}</span>`;
+        });
+        selectedDiv.innerHTML = html;
+      }
+    }
+
+    async function createNewCategoryDashboard() {
+      const nameInput = document.getElementById('newCategoryName');
+      const descriptionInput = document.getElementById('newCategoryDescription');
+
+      const categoryName = nameInput.value.trim();
+      const categoryDescription = descriptionInput.value.trim();
+
+      if (!categoryName) {
+        showErrorMessage('El nombre de la categoría es requerido');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/categories/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: categoryName,
+            description: categoryDescription
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          const categoriesContainer = document.getElementById('categoriesContainerCreate');
+
+          const newCategoryHtml = `
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     name="categories" value="${data.category.id}"
+                     id="new_cat_${data.category.id}"
+                     onchange="updateSelectedCategoriesCreate()" checked>
+              <label class="form-check-label" for="new_cat_${data.category.id}">
+                ${data.category.name}
+                <small class="text-success">(Recién creada)</small>
+              </label>
+              ${data.category.description ? `<br><small class="text-muted ms-3">${data.category.description}</small>` : ''}
+            </div>
+          `;
+
+          categoriesContainer.insertAdjacentHTML('beforeend', newCategoryHtml);
+
+          nameInput.value = '';
+          descriptionInput.value = '';
+
+          updateSelectedCategoriesCreate();
+
+          showSuccessMessage(`Categoría "${categoryName}" creada exitosamente`);
+        } else {
+          showErrorMessage(data.error || 'Error al crear la categoría');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showErrorMessage('Error de conexión al crear la categoría');
+      }
+    }
+
+    function showSuccessMessage(message) {
+      showMessage(message, 'success');
+    }
+
+    function showErrorMessage(message) {
+      showMessage(message, 'danger');
+    }
+
+    function showMessage(message, type) {
+      const messageContainer = document.getElementById('messageContainer');
+      const alertId = 'alert-' + Date.now();
+
+      const alertHtml = `
+        <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+          <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      `;
+
+      messageContainer.insertAdjacentHTML('beforeend', alertHtml);
+
+      setTimeout(() => {
+        const alert = document.getElementById(alertId);
+        if (alert) {
+          alert.remove();
+        }
+      }, 10000);
+    }
+
+    function confirmDelete(productName, form) {
+      const modalHtml = `
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar el producto "<strong>${productName}</strong>"?</p>
+                <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                  <i class="bi bi-trash"></i> Eliminar Producto
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+      const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+      const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+
+      confirmBtn.addEventListener('click', function() {
+        modal.hide();
+        form.submit();
+      });
+
+      modal.show();
+
+      document.getElementById('confirmDeleteModal').addEventListener('hidden.bs.modal', function () {
+        this.remove();
+      });
+
+      return false; // Evitar el envío inmediato del formulario
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateSelectedCategoriesCreate();
+    });
+  </script>
+</body>
+</html>
