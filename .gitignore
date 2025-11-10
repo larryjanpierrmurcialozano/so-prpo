@@ -4,3 +4,9 @@ instance/
 *.pyc
 venv/
 
+# Añadidos por el asistente
+.idea/
+.venv/
+.pytest_cache/
+# Archivos de entorno y cargas
+uploads/

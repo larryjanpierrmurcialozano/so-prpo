@@ -567,7 +567,6 @@
 
     <div class="search-container sticky-body">
       <div class="container">
-        <!-- Header de búsqueda -->
         <div class="search-header">
           <h1><i class="bi bi-search me-2"></i>Búsqueda Avanzada</h1>
           <p class="text-muted mb-3">Encuentra usuarios, páginas, productos y categorías</p>
@@ -577,42 +576,38 @@
                    placeholder="Buscar por nombre, título, descripción..."
                    value="{{ results.query }}">
 
-            <input type="hidden" name="type" id="hidden-type" value="{{ results.search_type }}">
-            <input type="hidden" name="category" id="hidden-category" value="{{ selected_category }}">
-
             <button type="submit" class="search-btn">
               <i class="bi bi-search me-1"></i>Buscar
             </button>
+
+            <div class="filters" style="width: 100%;">
+              <div class="filter-group">
+                <label for="search-type">Tipo:</label>
+                <select name="type" id="search-type" class="filter-select" onchange="this.form.submit()">
+                  <option value="all" {% if results.search_type == 'all' %}selected{% endif %}>Todo</option>
+                  <option value="users" {% if results.search_type == 'users' %}selected{% endif %}>Usuarios</option>
+                  <option value="pages" {% if results.search_type == 'pages' %}selected{% endif %}>Páginas</option>
+                  <option value="products" {% if results.search_type == 'products' %}selected{% endif %}>Productos</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="category-filter">Categoría:</label>
+                <select name="category" id="category-filter" class="filter-select" onchange="this.form.submit()">
+                  <option value="">Todas las categorías</option>
+                  {% for category in all_categories %}
+                  <option value="{{ category.id }}"
+                          {% if selected_category == category.id|string %}selected{% endif %}>
+                    {{ category.name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
           </form>
-
-          <div class="filters">
-            <div class="filter-group">
-              <label for="search-type">Tipo:</label>
-              <select name="type" id="search-type" class="filter-select" onchange="updateHiddenType(this.value); this.form.submit()">
-                <option value="all" {% if results.search_type == 'all' %}selected{% endif %}>Todo</option>
-                <option value="users" {% if results.search_type == 'users' %}selected{% endif %}>Usuarios</option>
-                <option value="pages" {% if results.search_type == 'pages' %}selected{% endif %}>Páginas</option>
-                <option value="products" {% if results.search_type == 'products' %}selected{% endif %}>Productos</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label for="category-filter">Categoría:</label>
-              <select name="category" id="category-filter" class="filter-select" onchange="updateHiddenCategory(this.value); this.form.submit()">
-                <option value="">Todas las categorías</option>
-                {% for category in all_categories %}
-                <option value="{{ category.id }}"
-                        {% if selected_category == category.id|string %}selected{% endif %}>
-                  {{ category.name }}
-                </option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
         </div>
 
         <div class="content-layout">
-          <!-- Resultados -->
           <div class="results-section">
             {% if results.query %}
             <h3>Resultados para "{{ results.query }}"</h3>
@@ -817,14 +812,6 @@
       url.searchParams.set('category', categoryId);
       url.searchParams.set('type', 'products');
       window.location = url;
-    }
-
-    function updateHiddenType(value) {
-      document.getElementById('hidden-type').value = value;
-    }
-
-    function updateHiddenCategory(value) {
-      document.getElementById('hidden-category').value = value;
     }
   </script>
 </body>
