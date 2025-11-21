@@ -1,3 +1,9 @@
+subdominios añadir.
+implementacion de tablas personalizables.
+un search que muestre por igual las paginas pero dentro de un nuevo html y no uno vinculado al search principal sin usuario.
+
+
+
 # 📚 CONCEPTOS AVANZADOS DEL PROYECTO - GUÍA COMPLETA
 
 1. Arquitectura con Blueprints
